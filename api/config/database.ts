@@ -2,8 +2,7 @@ import { envNumber, env, envBoolean } from '../common/helper/env-unit';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
-export const DataBaseConfig: TypeOrmModuleOptions &
-  Partial<MysqlConnectionOptions> = {
+export default {
   type: 'mysql',
   host: env('DB_HOST', '127.0.0.1'),
   port: envNumber('DB_PORT', 3306),
