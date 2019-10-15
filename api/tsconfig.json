@@ -9,6 +9,12 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "@config/*": ["./config/*"],
+      "@plugin/*": ["./plugin/*"],
+      "@common/*": ["./common/*"],
+      "@src/*": ["./src/*"],
+    },
     "incremental": true
   },
   "exclude": ["node_modules", "dist"]
