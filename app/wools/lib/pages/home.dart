@@ -68,6 +68,8 @@ class _HomeState extends State<Home> {
     );
   }
 
+
+
   Widget get _swiper {
     return Container(
       child: Container(
