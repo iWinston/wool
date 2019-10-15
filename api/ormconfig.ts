@@ -1,1 +1,2 @@
-export { DataBaseConfig } from 'config/database';
+import * as DatabaseConfig from '@config/database';
+module.exports = DatabaseConfig.default;
