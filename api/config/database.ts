@@ -1,6 +1,4 @@
 import { envNumber, env, envBoolean } from '../common/helper/env-unit';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 export default {
   type: 'mysql',
