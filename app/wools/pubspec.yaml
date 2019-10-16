@@ -41,6 +41,9 @@ dependencies:
   rxdart: ^0.22.1
   # 网络图片缓存
   cached_network_image: ^1.1.1
+  # 高德地图地位
+  amap_base_location: ^0.4.0+1
+  amap_location: ^0.2.0
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:wools/pages/location_view.dart';
+import 'package:wools/pages/post.dart';
 import 'package:wools/pages/tags.dart';
 import 'package:wools/widgets/images_widget.dart';
 import 'package:wools/widgets/info_card.dart';
@@ -29,6 +31,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: <Widget>[
           _appBar,
@@ -37,7 +40,7 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Tags()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationDemo()));
         },
         tooltip: 'Increment',
         child: Icon(Icons.add, color: Colors.pink,),

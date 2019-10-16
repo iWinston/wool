@@ -7,7 +7,6 @@ class Utils {
     return 'assets/images/$name.$format';
   }
 
-
   static KeyboardActionsConfig getKeyboardActionsConfig(List<FocusNode> list){
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
