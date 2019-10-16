@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { ConfigModule } from 'nestjs-config';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import * as path from 'path';
 import * as DatabaseConfig from '@config/database';
 
@@ -12,6 +13,7 @@ import * as DatabaseConfig from '@config/database';
     ConfigModule.load(
       path.resolve(__dirname, '../config', '**/!(*.d).{ts,js}'),
     ),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
