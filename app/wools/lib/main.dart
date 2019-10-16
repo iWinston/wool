@@ -1,11 +1,10 @@
-import 'package:amap_base_location/amap_base_location.dart';
 import 'package:flutter/material.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import './pages/home.dart';
 import 'package:flutter/services.dart';
 
 void main() async {
-  await AMap.init('e70da01d267562f50db59a22b36fc4b6');
+//  await AMap.init('e70da01d267562f50db59a22b36fc4b6');
   runApp(MyApp());
 }
 

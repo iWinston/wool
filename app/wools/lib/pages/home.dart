@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationDemo()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Tags()));
         },
         tooltip: 'Increment',
         child: Icon(Icons.add, color: Colors.pink,),
@@ -80,7 +80,9 @@ class _HomeState extends State<Home> {
         child: Swiper(
           itemBuilder: (BuildContext context,int index){
             return Container(
-              child: loadNetworkImage(img, width: double.infinity, height: 100)
+              child: Container(
+                child: Text('dl'),
+              )
             );
           },
           itemCount: 3,
