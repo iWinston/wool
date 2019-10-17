@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 BaseOptions options = new BaseOptions(
-  baseUrl: "https://www.easy-mock.com/mock/5d3e593fe1a16a2139dc7745/xmg/api/",
+  baseUrl: "https://5da803af23fa740014697b96.mockapi.io/api/",
   connectTimeout: 5000,
   receiveTimeout: 3000,
 );

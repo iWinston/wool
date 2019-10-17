@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wools/model/card_info.dart';
-import 'images_widget.dart';
+import 'package:wools/widgets/images_widget.dart';
 
 class InfoCard extends StatelessWidget {
   final CardInfoModel data;

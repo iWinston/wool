@@ -1,4 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:wools/resource/gaps.dart';
+import 'package:wools/utils/toast.dart';
+import 'package:wools/widgets/select_image.dart';
 
 class Post extends StatefulWidget {
   @override
@@ -9,17 +15,32 @@ class _PostState extends State<Post> {
 
   final TextEditingController _textController = new TextEditingController();
   String locationText = '所在位置';
+  File _imageFile;
+  String _goodsSortName;
+
+  void _getImage() async{
+    try {
+      _imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+      setState(() {});
+    } catch (e) {
+      Toast.show("没有权限，无法打开相册！");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: <Widget>[
-          _appBar,
-          _textArea,
-          _location,
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            _appBar,
+            _textArea,
+            _selectImage,
+            Gaps.vGap16,
+            _location,
+          ],
+        ),
       ),
     );
   }
@@ -85,6 +106,15 @@ class _PostState extends State<Post> {
           Text(locationText),
           Icon(Icons.keyboard_arrow_right, color: Color(0xffcccccc), size: 28,)
         ],
+      ),
+    );
+  }
+
+  Widget get _selectImage {
+    return  Center(
+      child: SelectedImage(
+          image: _imageFile,
+          onTap: _getImage
       ),
     );
   }
