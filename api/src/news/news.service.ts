@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { News } from './news.entity';
 import { Repository } from 'typeorm';
 import { TagService } from '@src/tag/tag.service';
+import { PaginateDto } from '@common/dto/paginate.dto';
 
 @Injectable()
 export class NewsService {
@@ -25,5 +26,18 @@ export class NewsService {
 
   async delete(newsId: number) {
     return await this.repo.softDelete(newsId);
+  }
+
+  async findAll() {
+    return await this.repo.findAndCount();
+  }
+
+  async findByTag(tagId: number, paginateDto: PaginateDto) {
+    return await this.repo
+      .createQueryBuilder()
+      .leftJoin('tags', 'tag')
+      .where('tag.id = :tagId', { tagId })
+      .paginate(paginateDto.current, paginateDto.size)
+      .getMany();
   }
 }
