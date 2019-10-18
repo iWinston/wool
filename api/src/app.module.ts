@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import * as path from 'path';
 import * as DatabaseConfig from '@config/database';
 import { AuthMiddleware } from './auth/auth.middleware';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthMiddleware } from './auth/auth.middleware';
     ),
     AuthModule,
     UserModule,
+    NewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
