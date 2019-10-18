@@ -22,4 +22,8 @@ export class NewsService {
       photoPath: dto.photoPath,
     });
   }
+
+  async delete(newsId: number) {
+    return await this.repo.softDelete(newsId);
+  }
 }
