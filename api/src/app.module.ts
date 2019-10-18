@@ -9,6 +9,7 @@ import * as path from 'path';
 import * as DatabaseConfig from '@config/database';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { NewsModule } from './news/news.module';
+import { TagModule } from './tag/tag.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { NewsModule } from './news/news.module';
     AuthModule,
     UserModule,
     NewsModule,
+    TagModule,
   ],
   controllers: [AppController],
   providers: [AppService],
