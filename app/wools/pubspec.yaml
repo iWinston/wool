@@ -43,6 +43,7 @@ dependencies:
   cached_network_image: ^1.1.1
   common_utils: ^1.1.3
   oktoast: ^2.2.0
+  animated_background: ^1.0.5
   # 高德地图地位
 #  amap_base_location: ^0.4.0+1
 #  amap_location: ^0.2.0
