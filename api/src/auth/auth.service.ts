@@ -8,17 +8,17 @@ import { UserService } from '@src/user/user.service';
 @Injectable()
 export class AuthService {
   private readonly redisClient;
-  constructor(
-    @InjectRepository(User) readonly repo: Repository<User>,
-    readonly userService: UserService,
-  ) {
+  constructor(readonly userService: UserService) {
     this.redisClient = redis.createClient();
   }
 
-  async validateUser(phone: string, code: string): Promise<User> {
+  async validateOrRegisterUser(phone: string, code: string): Promise<User> {
     const user = await this.userService.findOneByPhone(phone);
     if (user && code === '8888') {
       return user;
+    }
+    if (!user) {
+      return await this.userService.register(phone);
     }
     return null;
   }

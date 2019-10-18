@@ -10,4 +10,8 @@ export class UserService {
   async findOneByPhone(phone: string): Promise<User | undefined> {
     return this.repo.findOne({ phone });
   }
+
+  async register(phone: string) {
+    return this.repo.save({ phone });
+  }
 }
