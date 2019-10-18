@@ -16,6 +16,6 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post()
   loginOrRegister(@Body() authDto: AuthDto, @userParam() user: User) {
-    return user;
+    return this.authService.getLoginInfo(user);
   }
 }
