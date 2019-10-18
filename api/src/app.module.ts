@@ -10,6 +10,7 @@ import * as DatabaseConfig from '@config/database';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { NewsModule } from './news/news.module';
 import { TagModule } from './tag/tag.module';
+import { UserTagModule } from './user-tag/user-tag.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { TagModule } from './tag/tag.module';
     UserModule,
     NewsModule,
     TagModule,
+    UserTagModule,
   ],
   controllers: [AppController],
   providers: [AppService],
