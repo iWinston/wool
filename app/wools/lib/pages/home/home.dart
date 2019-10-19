@@ -90,7 +90,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
     });
 
     jpush.setup(
-      appKey: "cf08090bdec87ed1528d8ac9",
+      appKey: "2901ac7f6638c56788f37156",
       channel: "theChannel",
       production: false,
       debug: false,
