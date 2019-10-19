@@ -1,6 +1,5 @@
 import { Controller, Post, Body, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags, ApiOperation } from '@nestjs/swagger';
-import { TagIdsDto } from './tag.dto';
 import { userParam } from '@common/decorator/user.decorator';
 import { TagService } from './tag.service';
 

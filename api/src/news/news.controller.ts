@@ -22,12 +22,16 @@ import { NewsDto } from './news.dto';
 import { userParam } from '@common/decorator/user.decorator';
 import { PaginateDto } from '@common/dto/paginate.dto';
 import { AddPointInterceptor } from '@common/interceptor/add-point.interceptor';
+import { InjectConfig, ConfigService } from 'nestjs-config';
 
 @ApiBearerAuth()
 @ApiUseTags('羊毛帖')
 @Controller('news')
 export class NewsController {
-  constructor(readonly newsService: NewsService) {}
+  constructor(
+    readonly newsService: NewsService,
+    @InjectConfig() readonly config: ConfigService,
+  ) {}
 
   @ApiOperation({ title: '发帖' })
   @Post()
@@ -62,6 +66,6 @@ export class NewsController {
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
   upload(@UploadedFile() file) {
-    console.log(file);
+    return `${this.config.get('app.storageUrl')}/${file.filename}`;
   }
 }
