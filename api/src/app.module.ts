@@ -10,6 +10,7 @@ import * as DatabaseConfig from '@config/database';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { NewsModule } from './news/news.module';
 import { TagModule } from './tag/tag.module';
+import { globalInterceptorProvider } from '@common/provider/interceptor.provider';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { TagModule } from './tag/tag.module';
     TagModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ...globalInterceptorProvider],
 })
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer): void {
