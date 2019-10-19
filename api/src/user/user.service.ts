@@ -20,6 +20,15 @@ export class UserService {
     return this.repo.findOne({ phone });
   }
 
+  async getOne(userId: number) {
+    return await this.repo.findOneOrFail({
+      where: {
+        id: userId,
+      },
+      relations: ['tags'],
+    });
+  }
+
   async register(phone: string) {
     const name = this.genName(phone);
     const avatorPath = this.genAvatorPath(name);

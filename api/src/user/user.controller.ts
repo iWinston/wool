@@ -1,4 +1,4 @@
-import { Controller, Patch, Body, Post } from '@nestjs/common';
+import { Controller, Patch, Body, Post, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags, ApiOperation } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { userParam } from '@common/decorator/user.decorator';
@@ -21,5 +21,11 @@ export class UserController {
   @Post('point')
   addPointToUser(@Body() dto: PointDto, @userParam() user: User) {
     return this.userService.updatePoint(user, dto.point);
+  }
+
+  @ApiOperation({ title: '获取用户信息' })
+  @Get()
+  getOne(@userParam('id') userId: number) {
+    return this.userService.getOne(userId);
   }
 }
