@@ -38,7 +38,7 @@ export class UserService {
 
   genName(phone: string) {
     if (phone === '18719139474') {
-      return '喜羊羊小队';
+      return '喜羊羊';
     }
     return faker.fake('{{name.findName}}');
   }

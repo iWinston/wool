@@ -49,6 +49,9 @@ export class AuthService {
       return null;
     }
     const { userId } = JSON.parse(info);
-    return await this.userService.repo.findOne({ id: userId });
+    return await this.userService.repo.findOne({
+      where: { id: userId },
+      relations: ['tags'],
+    });
   }
 }
