@@ -39,6 +39,7 @@ export class NewsService {
     return await this.repo
       .createQueryBuilder('it')
       .leftJoin('it.tags', 'tag')
+      .leftJoinAndSelect('it.user', 'user')
       .where('tag.id = :tagId', { tagId })
       .paginate(paginateDto.current, paginateDto.size)
       .getMany();
