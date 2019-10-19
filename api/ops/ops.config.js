@@ -24,8 +24,7 @@ module.exports = {
             ref: 'origin/master',
             repo: 'git@github.com:iWinston/wool.git',
             path : '/var/www/wool',
-            'pre-deploy': 'cd api',
-            'post-deploy': 'yarn install && yarn build && pm2 reload ./ops/ops.config.js --env production'
+            'post-deploy': 'cd api && yarn install && yarn build && pm2 reload ./ops/ops.config.js --env production'
         },
         dev : {
             user: 'root',
@@ -33,8 +32,7 @@ module.exports = {
             ref : 'origin/dev',
             repo: 'git@github.com:iWinston/wool.git',
             path: '/var/www/wool',
-            'pre-deploy': 'cd api',
-            'post-deploy': 'yarn install && yarn build && pm2 reload ./ops/ops.config.js'
+            'post-deploy': 'cd api && yarn install && yarn build && pm2 reload ./ops/ops.config.js'
         }
     }
 };
