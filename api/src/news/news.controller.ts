@@ -23,6 +23,7 @@ import { userParam } from '@common/decorator/user.decorator';
 import { PaginateDto } from '@common/dto/paginate.dto';
 import { AddPointInterceptor } from '@common/interceptor/add-point.interceptor';
 import { InjectConfig, ConfigService } from 'nestjs-config';
+import { PushInterceptor } from '@common/interceptor/push.interceptor';
 
 @ApiBearerAuth()
 @ApiUseTags('羊毛帖')
@@ -36,6 +37,7 @@ export class NewsController {
   @ApiOperation({ title: '发帖' })
   @Post()
   @UseInterceptors(AddPointInterceptor)
+  @UseInterceptors(PushInterceptor)
   create(@Body() dto: NewsDto, @userParam('id') userId: number) {
     return this.newsService.create(userId, dto);
   }
