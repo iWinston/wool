@@ -14,9 +14,11 @@ export class AddPointInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       tap(() => {
-        const user = context.switchToHttp().getRequest().user;
+        const req = context.switchToHttp().getRequest();
+        const user = req.user;
+        const point = 10;
         if (user) {
-          this.userService.updatePoint(user, 10);
+          this.userService.updatePoint(user, point);
         }
       }),
     );

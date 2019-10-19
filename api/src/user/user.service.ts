@@ -33,7 +33,7 @@ export class UserService {
 
   async updatePoint(user: User, num: number) {
     user.point += num;
-    await this.repo.save(user);
+    return await this.repo.save(user);
   }
 
   genName(phone: string) {
