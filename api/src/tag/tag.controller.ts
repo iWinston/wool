@@ -1,6 +1,5 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags, ApiOperation } from '@nestjs/swagger';
-import { userParam } from '@common/decorator/user.decorator';
 import { TagService } from './tag.service';
 
 @ApiBearerAuth()
@@ -11,7 +10,7 @@ export class TagController {
 
   @ApiOperation({ title: '获取标签列表' })
   @Get()
-  findAll(@userParam('id') userId: number) {
-    return this.tagService.findAll(userId);
+  findAll() {
+    return this.tagService.findAll();
   }
 }

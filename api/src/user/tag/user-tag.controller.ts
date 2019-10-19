@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags, ApiOperation } from '@nestjs/swagger';
 import { TagIdsDto } from '@src/tag/tag.dto';
 import { User } from '@src/user/user.entity';
@@ -14,5 +14,11 @@ export class UserTagController {
   @Post()
   bindTagsToUser(@Body() dto: TagIdsDto, @userParam() user: User) {
     return this.userTagService.bindTagsToUser(user, dto.tagIds);
+  }
+
+  @ApiOperation({ title: '获取标签列表' })
+  @Get()
+  findAll(@userParam() user: User) {
+    return this.userTagService.getTags(user);
   }
 }
