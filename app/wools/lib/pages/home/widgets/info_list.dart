@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wools/dao/news_dao.dart';
+import 'package:wools/model/news_model.dart';
 import 'package:wools/utils/toast.dart';
 import 'package:wools/widgets/my_refresh_list.dart';
 import 'package:wools/widgets/state_layout.dart';
@@ -6,13 +8,13 @@ import 'package:wools/widgets/state_layout.dart';
 import 'info_item.dart';
 
 class InfoList extends StatefulWidget {
+  final int index;
 
   const InfoList({
     Key key,
     @required this.index
   }): super(key: key);
 
-  final int index;
 
   @override
   _InfoListState createState() => _InfoListState();
@@ -21,6 +23,9 @@ class InfoList extends StatefulWidget {
 class _InfoListState extends State<InfoList> with AutomaticKeepAliveClientMixin<InfoList>, SingleTickerProviderStateMixin {
 
   List _list = [];
+  int _page = 1;
+  int _maxPage;
+  StateType _stateType = StateType.loading;
 
   @override
   void initState() {
@@ -32,22 +37,20 @@ class _InfoListState extends State<InfoList> with AutomaticKeepAliveClientMixin<
     _onRefresh();
   }
 
-  List<String> _imgList = [
-    "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3130502839,1206722360&fm=26&gp=0.jpg",
-    "https://xxx", // 故意使用一张错误链接
-    "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1762976310,1236462418&fm=26&gp=0.jpg",
-    "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3659255919,3211745976&fm=26&gp=0.jpg",
-    "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2085939314,235211629&fm=26&gp=0.jpg",
-    "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2441563887,1184810091&fm=26&gp=0.jpg"
-  ];
-
   Future _onRefresh() async {
-    await Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        _page = 1;
-        _list = List.generate(widget.index == 0 ? 3 : 10, (i) => 'newItem：$i');
-      });
+    NewsModel res = await NewsDao.fetch(widget.index, _page);
+    print(res.data);
+    setState(() {
+      _page = 1;
+      _list = res.data;
     });
+
+//    await Future.delayed(Duration(seconds: 2), () {
+//      setState(() {
+//        _page = 1;
+//        _list = List.generate(widget.index == 0 ? 3 : 10, (i) => 'newItem：$i');
+//      });
+//    });
   }
 
   Future _loadMore() async {
@@ -59,9 +62,7 @@ class _InfoListState extends State<InfoList> with AutomaticKeepAliveClientMixin<
     });
   }
 
-  int _page = 1;
-  int _maxPage;
-  StateType _stateType = StateType.loading;
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +74,8 @@ class _InfoListState extends State<InfoList> with AutomaticKeepAliveClientMixin<
         loadMore: _loadMore,
         hasMore: _page < _maxPage,
         itemBuilder: (_, index){
-          return InfoItem();
+          print('三分$index');
+          return InfoItem(newItem: _list[index]);
         }
     );
   }

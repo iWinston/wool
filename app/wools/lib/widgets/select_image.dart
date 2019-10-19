@@ -7,8 +7,8 @@ class SelectedImage extends StatelessWidget {
 
   const SelectedImage({
     Key key,
-    this.width : 240.0,
-    this.height : 100.0,
+    this.width : 277.0,
+    this.height : 187.0,
     this.radius : 8.0,
     this.onTap,
     this.image
@@ -32,7 +32,7 @@ class SelectedImage extends StatelessWidget {
           // 图片圆角展示
           borderRadius: BorderRadius.circular(radius),
           image: DecorationImage(
-              image: image == null ? ImageUtils.getAssetImage("icons/icon_zj") : FileImage(image),
+              image: image == null ? AssetImage("assets/images/icons/add.png") : FileImage(image),
               fit: BoxFit.cover,
           ),
         ),
@@ -40,4 +40,3 @@ class SelectedImage extends StatelessWidget {
     );
   }
 }
-

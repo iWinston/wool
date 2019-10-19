@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:wools/pages/login.dart';
 import 'package:wools/pages/post.dart';
+import 'package:wools/pages/splash.dart';
 import 'package:wools/pages/tags.dart';
 import 'package:wools/pages/home/home.dart';
 
@@ -30,11 +32,11 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.pink,
         ),
-        home: Home(title: '撸羊毛',),
+        home: Splash(),
         routes: <String, WidgetBuilder> {
           // 这里可以定义静态路由，不能传递参数
-          '/router/post': (BuildContext context) => Post(),
-          '/router/tags': (BuildContext context) => Tags(),
+          'home': (BuildContext context) => Home(),
+          'login': (BuildContext context) => LoginPage(),
         },
       ),
     );

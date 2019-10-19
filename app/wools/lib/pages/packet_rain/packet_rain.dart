@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:animated_background/animated_background.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -17,8 +18,14 @@ class _PacketRainState extends State<PacketRain> with TickerProviderStateMixin {
   final int second = 15;
   int time = 15;
   bool _isClick = true;
-  Animation<double> animation;
+  Animation<Offset> animation;
+  Animation<Offset> animation2;
   AnimationController controller;
+  List _animations = [];
+  Color c = Colors.pink;
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+
+  List<String> _data = ['horse', 'cow', 'fjk', 'fdk'];
 
   @override
   void initState() {
@@ -29,10 +36,18 @@ class _PacketRainState extends State<PacketRain> with TickerProviderStateMixin {
 
   void _initAnimation () {
     controller = AnimationController(duration: const Duration(milliseconds: 3000), vsync: this);
-    animation = Tween(begin: 0.0, end: 300.0).animate(controller)..addListener(() {
-      print(animation.value);
-      setState(()=>{});
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        //AnimationStatus.completed 动画在结束时停止的状态
+        //ontroller.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        //AnimationStatus.dismissed 表示动画在开始时就停止的状态
+        //controller.forward();
+      }
     });
+    animation = Tween(begin: Offset.zero, end: Offset(0, 5)).animate(controller);
+    animation2 = Tween(begin: Offset.zero, end: Offset(0, 1)).animate(controller);
+    controller.forward();
   }
 
   void _showDialog() {
@@ -91,6 +106,7 @@ class _PacketRainState extends State<PacketRain> with TickerProviderStateMixin {
       setState(() {
         time = second - i - 1;
         _isClick = time < 1;
+
       });
     });
   }
@@ -142,8 +158,71 @@ class _PacketRainState extends State<PacketRain> with TickerProviderStateMixin {
                   },
                   child: Text('button')
               ),
+              SizedBox(
+                height: 500,
+                width: double.infinity,
+                child: AnimatedList(
+                  key: _listKey,
+                  initialItemCount: _data.length,
+                  itemBuilder: (context, index, animation) {
+                    return _buildItem(_data[index]);
+                  },
+                ),
+              ),
+
+//              SlideTransition(
+//                position: animation,
+//                child: Container(
+//                  color: Colors.pink,
+//                  height: 100,
+//                  width: 100,
+//                  child: Text('jfkd'),
+//                ),
+//              ),
+//              Center(
+//                child: GestureDetector(
+//                  onTap: (){
+//                    setState(() {
+//                      c = Colors.transparent;
+//                    });
+//                  },
+//                  child: SlideTransition(
+//                    position: animation2,
+//                    child: Container(
+//                      color: c,
+//                      height: 100,
+//                      width: 100,
+//                      child: loadAssetImage('packet_rain/wool1',),
+//                    ),
+//                  ),
+//                ),
+//              ),
             ],
           )
+      )
+    );
+  }
+
+  Widget _buildItem (String item) {
+    return SlideTransition(
+        position: animation,
+        child: Container(
+          margin: EdgeInsets.only(left: Random().nextDouble() * 200),
+          height: 100,
+          width: 100,
+          child: Image.network('https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=320178652,790985626&fm=26&gp=0.jpg')
+        )
+    );
+  }
+
+  Widget woolItem() {
+    return SlideTransition(
+      position: animation2,
+      child: Container(
+        color: Colors.pink,
+        height: 100,
+        width: 100,
+        child: Text(''),
       )
     );
   }

@@ -50,7 +50,7 @@ class _TagsState extends State<Tags> {
 
   Widget _tab(String tab) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
         border: Border.all(color: Color(0xcc9d9d9d0)),
