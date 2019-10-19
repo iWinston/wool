@@ -4,6 +4,7 @@ import { PushService } from './push.service';
 
 @Module({
   controllers: [PushController],
-  providers: [PushService]
+  providers: [PushService],
+  exports: [PushService],
 })
 export class PushModule {}
