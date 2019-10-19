@@ -44,8 +44,8 @@ export class NewsController {
 
   @ApiOperation({ title: '贴子列表' })
   @Get()
-  findAll() {
-    return this.newsService.findAll();
+  findAll(@Query() paginateDto: PaginateDto) {
+    return this.newsService.findAll(paginateDto);
   }
 
   @ApiOperation({ title: '根据标签获取贴子列表' })

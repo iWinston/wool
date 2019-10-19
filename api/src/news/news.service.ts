@@ -28,8 +28,11 @@ export class NewsService {
     return await this.repo.softDelete(newsId);
   }
 
-  async findAll() {
-    return await this.repo.findAndCount();
+  async findAll(paginateDto: PaginateDto) {
+    return await this.repo.findAndCount({
+      current: paginateDto.current,
+      size: paginateDto.size,
+    });
   }
 
   async findByTag(tagId: number, paginateDto: PaginateDto) {
