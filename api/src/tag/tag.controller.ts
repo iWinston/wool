@@ -1,6 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags, ApiOperation } from '@nestjs/swagger';
 import { TagService } from './tag.service';
+import { TagDto } from './tag.dto';
 
 @ApiBearerAuth()
 @ApiUseTags('标签')
@@ -12,5 +13,11 @@ export class TagController {
   @Get()
   findAll() {
     return this.tagService.findAll();
+  }
+
+  @ApiOperation({ title: '添加标签' })
+  @Post()
+  create(@Body() dto: TagDto) {
+    return this.tagService.create(dto);
   }
 }

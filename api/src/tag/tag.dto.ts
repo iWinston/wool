@@ -5,6 +5,8 @@ import {
   ArrayUnique,
   IsInt,
   IsPositive,
+  IsString,
+  IsNotEmpty,
 } from 'class-validator';
 
 export class TagIdsDto {
@@ -17,4 +19,13 @@ export class TagIdsDto {
   @IsInt({ each: true })
   @IsPositive({ each: true })
   tagIds: number[];
+}
+
+export class TagDto {
+  @ApiModelProperty({
+    example: '官方',
+  })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 }
