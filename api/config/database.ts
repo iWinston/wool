@@ -1,4 +1,4 @@
-import { envNumber, env, envBoolean } from '../common/helper/env-unit';
+import { envNumber, env, envBoolean } from '@common/helper/env-unit';
 
 export default {
   type: 'mysql',

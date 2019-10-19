@@ -39,6 +39,6 @@ async function bootstrap() {
     .swagger-ui .execute-wrapper { padding: 10px }`,
   });
 
-  await app.listen(3000);
+  await app.listen(config.get('app.port'));
 }
 bootstrap();
