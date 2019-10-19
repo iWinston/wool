@@ -13,6 +13,7 @@ import { TagModule } from './tag/tag.module';
 import { globalInterceptorProvider } from '@common/provider/interceptor.provider';
 import { ServeStaticMiddleware } from '@nest-middlewares/serve-static';
 import { DiskStorageModule } from '@common/module/disk-storage.module';
+import { PushModule } from './push/push.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { DiskStorageModule } from '@common/module/disk-storage.module';
     NewsModule,
     TagModule,
     DiskStorageModule,
+    PushModule,
   ],
   controllers: [AppController],
   providers: [AppService, ...globalInterceptorProvider],
