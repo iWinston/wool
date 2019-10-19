@@ -7,12 +7,14 @@ import {
   Delete,
   Get,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags, ApiOperation } from '@nestjs/swagger';
 import { NewsService } from './news.service';
 import { NewsDto } from './news.dto';
 import { userParam } from '@common/decorator/user.decorator';
 import { PaginateDto } from '@common/dto/paginate.dto';
+import { AddPointInterceptor } from '@common/interceptor/add-point.interceptor';
 
 @ApiBearerAuth()
 @ApiUseTags('羊毛帖')
@@ -22,6 +24,7 @@ export class NewsController {
 
   @ApiOperation({ title: '发帖' })
   @Post()
+  @UseInterceptors(AddPointInterceptor)
   create(@Body() dto: NewsDto, @userParam('id') userId: number) {
     return this.newsService.create(userId, dto);
   }

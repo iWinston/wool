@@ -25,4 +25,9 @@ export class UserService {
     user.name = dto.name;
     return this.userTagService.bindTagsToUser(user, dto.tagIds);
   }
+
+  async updatePoint(user: User, num: number) {
+    user.point += num;
+    await this.repo.save(user);
+  }
 }
