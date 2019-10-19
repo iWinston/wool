@@ -1,7 +1,7 @@
 module.exports = {
     apps : [{
         name: 'wool',
-        script: 'dist/src/main.js',
+        script: 'api/dist/src/main.js',
         // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
         args: '',
         instances: 2,
