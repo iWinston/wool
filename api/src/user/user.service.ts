@@ -1,14 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, forwardRef, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { UserProfileDto } from './user-profile.dto';
-import { UserTagService } from '@src/user-tag/user-tag.service';
+import { UserTagService } from './tag/user-tag.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) readonly repo: Repository<User>,
+    @Inject(forwardRef(() => UserTagService))
     readonly userTagService: UserTagService,
   ) {}
 

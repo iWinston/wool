@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserTagController } from './user-tag.controller';
+import { UserTagController } from '../../user-tag/user-tag.controller';
 
 describe('UserTag Controller', () => {
   let controller: UserTagController;
