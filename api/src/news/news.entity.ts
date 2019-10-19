@@ -13,7 +13,7 @@ import { User } from '@src/user/user.entity';
 
 @Entity()
 export class News extends CommonEntity<News> {
-  @Column({ type: 'tinyint' })
+  @Column({ type: 'int' })
   userId: number;
 
   @Column()

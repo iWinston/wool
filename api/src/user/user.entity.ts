@@ -15,7 +15,7 @@ export class User extends CommonEntity<User> {
   avatorPath: string;
 
   @Column({
-    type: 'tinyint',
+    type: 'int',
     default: 0,
   })
   point: number;
