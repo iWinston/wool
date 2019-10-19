@@ -8,8 +8,15 @@ import {
   Get,
   Query,
   UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiUseTags, ApiOperation } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBearerAuth,
+  ApiUseTags,
+  ApiOperation,
+  ApiImplicitFile,
+} from '@nestjs/swagger';
 import { NewsService } from './news.service';
 import { NewsDto } from './news.dto';
 import { userParam } from '@common/decorator/user.decorator';
@@ -48,5 +55,13 @@ export class NewsController {
     @Query() paginateDto: PaginateDto,
   ) {
     return this.newsService.findByTag(tagId, paginateDto);
+  }
+
+  @ApiOperation({ title: '添加照片' })
+  @ApiImplicitFile({ name: 'file' })
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('upload')
+  upload(@UploadedFile() file) {
+    console.log(file);
   }
 }

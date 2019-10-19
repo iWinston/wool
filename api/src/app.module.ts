@@ -1,6 +1,6 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { ConfigModule } from 'nestjs-config';
+import { ConfigModule, InjectConfig, ConfigService } from 'nestjs-config';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
@@ -11,6 +11,7 @@ import { AuthMiddleware } from './auth/auth.middleware';
 import { NewsModule } from './news/news.module';
 import { TagModule } from './tag/tag.module';
 import { globalInterceptorProvider } from '@common/provider/interceptor.provider';
+import { ServeStaticMiddleware } from '@nest-middlewares/serve-static';
 
 @Module({
   imports: [
@@ -27,7 +28,10 @@ import { globalInterceptorProvider } from '@common/provider/interceptor.provider
   providers: [AppService, ...globalInterceptorProvider],
 })
 export class AppModule implements NestModule {
+  constructor(@InjectConfig() readonly config: ConfigService) {}
   public configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(AuthMiddleware).forRoutes('/');
+    // IMPORTANT! Call Middleware.configure BEFORE using it for routes
+    ServeStaticMiddleware.configure(this.config.get('app.multerDest'));
+    consumer.apply(AuthMiddleware, ServeStaticMiddleware).forRoutes('/');
   }
 }
