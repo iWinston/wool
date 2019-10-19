@@ -4,6 +4,8 @@ import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { UserProfileDto } from './user-profile.dto';
 import { UserTagService } from './tag/user-tag.service';
+import * as faker from 'faker';
+import { InjectConfig, ConfigService } from 'nestjs-config';
 
 @Injectable()
 export class UserService {
@@ -11,6 +13,7 @@ export class UserService {
     @InjectRepository(User) readonly repo: Repository<User>,
     @Inject(forwardRef(() => UserTagService))
     readonly userTagService: UserTagService,
+    @InjectConfig() readonly config: ConfigService,
   ) {}
 
   async findOneByPhone(phone: string): Promise<User | undefined> {
@@ -18,7 +21,9 @@ export class UserService {
   }
 
   async register(phone: string) {
-    return this.repo.save({ phone });
+    const name = this.genName(phone);
+    const avatorPath = this.genAvatorPath(name);
+    return this.repo.save({ phone, name, avatorPath });
   }
 
   async patch(user: User, dto: UserProfileDto) {
@@ -29,5 +34,17 @@ export class UserService {
   async updatePoint(user: User, num: number) {
     user.point += num;
     await this.repo.save(user);
+  }
+
+  genName(phone: string) {
+    if (phone === '18719139474') {
+      return '喜羊羊小队';
+    }
+    return faker.fake('{{name.findName}}');
+  }
+
+  genAvatorPath(name: string) {
+    const letter = name === '喜羊羊小队' ? 'X' : name.slice(0, 1);
+    return `${this.config.get('app.host')}/assert/default-avator/${letter}.png`;
   }
 }
