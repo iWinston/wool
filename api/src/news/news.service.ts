@@ -34,8 +34,8 @@ export class NewsService {
 
   async findByTag(tagId: number, paginateDto: PaginateDto) {
     return await this.repo
-      .createQueryBuilder()
-      .leftJoin('tags', 'tag')
+      .createQueryBuilder('it')
+      .leftJoin('it.tags', 'tag')
       .where('tag.id = :tagId', { tagId })
       .paginate(paginateDto.current, paginateDto.size)
       .getMany();
