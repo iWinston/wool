@@ -1,11 +1,19 @@
-import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToMany,
+  JoinTable,
+  OneToOne,
+  JoinColumn,
+  ManyToOne,
+} from 'typeorm';
 import { CommonEntity } from '@common/entity/common.entity';
 import { Tag } from '@src/tag/tag.entity';
 import { User } from '@src/user/user.entity';
 
 @Entity()
 export class News extends CommonEntity<News> {
-  @Column({ type: 'tinyint' })
+  @Column({ type: 'int' })
   userId: number;
 
   @Column()
@@ -25,4 +33,8 @@ export class News extends CommonEntity<News> {
   @ManyToMany(type => User)
   @JoinTable({ name: 'liked_users' })
   likedUsers: User[];
+
+  @ManyToOne(type => User)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 }
