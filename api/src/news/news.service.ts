@@ -32,6 +32,9 @@ export class NewsService {
     return await this.repo.findAndCount({
       current: paginateDto.current,
       size: paginateDto.size,
+      order: {
+        id: 'DESC',
+      },
     });
   }
 
@@ -41,6 +44,7 @@ export class NewsService {
       .leftJoin('it.tags', 'tag')
       .leftJoinAndSelect('it.user', 'user')
       .where('tag.id = :tagId', { tagId })
+      .orderBy('it.id', 'DESC')
       .paginate(paginateDto.current, paginateDto.size)
       .getMany();
   }
