@@ -49,7 +49,7 @@ export class UserService {
     if (phone === '18719139474') {
       return '喜羊羊';
     }
-    return faker.fake('{{name.findName}}');
+    return faker.fake('{{name.middleName}}');
   }
 
   genAvatorPath(name: string) {
