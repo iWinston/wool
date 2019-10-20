@@ -46,7 +46,7 @@ export class UserService {
   }
 
   genName(phone: string) {
-    if (phone === '18719139474') {
+    if (phone === '18814383371') {
       return '喜羊羊';
     }
     return faker.fake('{{name.middleName}}');
