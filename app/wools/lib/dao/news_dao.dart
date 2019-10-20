@@ -12,7 +12,6 @@ class NewsDao {
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
     String ur = '$URL$id?current=$current&size=10';
-    print(ur);
     final response = await http.get(ur, headers: {'Authorization': token}, );
     print(response.statusCode);
     if (response.statusCode == 200) {

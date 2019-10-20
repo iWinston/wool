@@ -1,20 +1,18 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wools/dao/tags_dao.dart';
 import 'package:wools/dao/user_dao.dart';
-import 'package:wools/model/home_model.dart';
 import 'package:wools/model/tags_model.dart';
 import 'package:wools/model/user_model.dart';
 import 'package:wools/pages/home/provider/provider.dart';
 import 'package:wools/pages/home/widgets/info_list.dart';
-import 'package:wools/pages/location_view.dart';
 import 'package:wools/pages/packet_rain/packet_rain.dart';
 import 'package:wools/pages/post.dart';
 import 'package:wools/pages/tags_page.dart';
+import 'package:wools/resource/colors.dart';
 import 'package:wools/resource/gaps.dart';
 import 'package:wools/utils/event_bus.dart';
 import 'package:wools/utils/toast.dart';
@@ -24,6 +22,7 @@ import 'package:wools/model/card_info.dart';
 import 'package:flutter/services.dart';
 import 'package:wools/net/http.dart';
 import '../login.dart';
+import 'package:wools/utils/event_bus.dart';
 
 
 class Home extends StatefulWidget {
@@ -71,13 +70,6 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
     super.dispose();
   }
 
-//  _initUserInfo() async {
-//    final prefs = await SharedPreferences.getInstance();
-//    int id = prefs.getInt('id');
-//    this.setState((){
-//      _id = id;
-//    });
-//  }
 
   void getData() async {
     TagsModel res = await TagsDao.fetch();
@@ -92,16 +84,13 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
     UserInfoModel res = await UserDao.fetch();
     if (res.status == 'succ') {
       _userInfo = res.data;
-      print(_userInfo);
-
-//      jpush.setTags([_userInfo.phone]).then((map) {
-//      }).catchError((error) {
-//      }) ;
+      jpush.setTags([_userInfo.phone]).then((map) {
+      }).catchError((error) {
+      }) ;
     } else {
       Toast.show('获取用户信息失败');
     }
   }
-
 
   _onPageChange(int index) {
     setState(() {
@@ -142,7 +131,11 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
           setState(() {
             debugLable = "flutter onOpenNotification: $message";
           });
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => PacketRain()));
+          if (message['alert'] == '帖子内容') {
+            eventBus.fire(pointEvent(2));
+          } else {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => PacketRain()));
+          }
         },
         onReceiveMessage: (Map<String, dynamic> message) async {
           print("flutter onReceiveMessage: $message");
@@ -197,7 +190,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
             child: PageView.builder(
               itemBuilder: (BuildContext context, int index) {
                 print(index);
-                return InfoList(index: index, userId: _id,);
+                return InfoList(index: index, userId: _userInfo.id,);
                },
               itemCount: tabs.length,
               controller: _pageController,
@@ -208,8 +201,8 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => PacketRain()));
-//          tags: tabs
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Post(tags: tabs)));
+//
         },
         tooltip: 'Increment',
         child: Icon(Icons.add, color: Colors.pink,),
@@ -221,9 +214,12 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
   Widget get _appBar {
     return Container(
       margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top,),
-      color: Colors.white,
       height: 50,
       padding: EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        border: Border.fromBorderSide(BorderSide(width: 1.0, color: Color(0xffdddddd))),
+        color: Colors.white,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -235,14 +231,13 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
               children: <Widget>[
                 Image.network(_userInfo.avatorPath??'',height: 36, width: 36, fit: BoxFit.fill),
                 Gaps.hGap8,
-                Text(_userInfo.name??'')
               ],
             )
           ),
           Text('找羊毛', style: TextStyle(color: Colors.pink, fontSize: 20),),
           Row(
             children: <Widget>[
-              Icon(Icons.location_on, color: Color(0xff888888),),
+              Icon(Icons.location_on, color: Colors.pink,),
               Text(city, style: TextStyle(color: Color(0xff888888), fontSize: 15),)
             ],
           )

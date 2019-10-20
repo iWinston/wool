@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wools/model/home_model.dart';
 import 'package:wools/model/tags_model.dart';
 
-const URL = 'http://wool.junmapp.com/api/tag';
+const URL = 'http://wool.junmapp.com/api/user-tag';
 
 class TagsDao {
   static Future<TagsModel> fetch () async {

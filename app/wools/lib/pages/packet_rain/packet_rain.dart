@@ -23,7 +23,7 @@ class _PacketRainState extends State<PacketRain> with TickerProviderStateMixin {
   Color c = Colors.pink;
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
 
-  List<String> _data = ['horse', 'cow', 'fjk', 'fdk'];
+  List<String> _data = ['horse', 'cow', 'fjk', 'fdk', 'df'];
 
   @override
   void initState() {
@@ -73,7 +73,7 @@ class _PacketRainState extends State<PacketRain> with TickerProviderStateMixin {
                         Text('88', style: TextStyle(color: Colors.pink, fontSize: 20),),
                         Gaps.vGap5,
                         Text('恭喜您抢到了88羊毛', style: TextStyle(color: Color(0xff333333)),),
-                        Gaps.vGap16,
+                        Gaps.vGap20,
                         FlatButton(
                           color: Colors.pink,
                           textColor: Colors.white,
@@ -104,8 +104,14 @@ class _PacketRainState extends State<PacketRain> with TickerProviderStateMixin {
       setState(() {
         time = second - i - 1;
         _isClick = time < 1;
-
       });
+    });
+    _alertDialog();
+  }
+
+  _alertDialog() {
+    Future.delayed(Duration(seconds: 2), () {
+      _showDialog();
     });
   }
 
@@ -150,12 +156,6 @@ class _PacketRainState extends State<PacketRain> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              FlatButton(
-                  onPressed: (){
-                    _showDialog();
-                  },
-                  child: Text('button')
-              ),
               SizedBox(
                 height: 500,
                 width: double.infinity,
@@ -167,34 +167,7 @@ class _PacketRainState extends State<PacketRain> with TickerProviderStateMixin {
                   },
                 ),
               ),
-
-//              SlideTransition(
-//                position: animation,
-//                child: Container(
-//                  color: Colors.pink,
-//                  height: 100,
-//                  width: 100,
-//                  child: Text('jfkd'),
-//                ),
-//              ),
-//              Center(
-//                child: GestureDetector(
-//                  onTap: (){
-//                    setState(() {
-//                      c = Colors.transparent;
-//                    });
-//                  },
-//                  child: SlideTransition(
-//                    position: animation2,
-//                    child: Container(
-//                      color: c,
-//                      height: 100,
-//                      width: 100,
-//                      child: loadAssetImage('packet_rain/wool1',),
-//                    ),
-//                  ),
-//                ),
-//              ),
+//
             ],
           )
       )
@@ -208,7 +181,7 @@ class _PacketRainState extends State<PacketRain> with TickerProviderStateMixin {
           margin: EdgeInsets.only(left: Random().nextDouble() * 200),
           height: 100,
           width: 100,
-          child: Image.network('https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=320178652,790985626&fm=26&gp=0.jpg')
+          child: Image.network('http://wool.junmapp.com/assert/wool.png')
         )
     );
   }

@@ -29,7 +29,7 @@ class _InfoItemState extends State<InfoItem> {
 
   _handleDelete() async {
     Dio dio = $http();
-    Response res = await dio.post('news/${widget.newItem.id}');
+    Response res = await dio.delete('news/${widget.newItem.id}');
     if (res.data['status'] == 'succ') {
       Toast.show('删除成功');
       widget.refreshData();
@@ -53,7 +53,7 @@ class _InfoItemState extends State<InfoItem> {
             ],
           ),
           Gaps.vGap10,
-          Text(widget.newItem.content??''),
+          Text(widget.newItem.content??'', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
           Gaps.vGap10,
           loadNetworkImage(widget.newItem.photoPath, width: double.infinity, height: 200),
           Gaps.vGap10,
@@ -70,7 +70,7 @@ class _InfoItemState extends State<InfoItem> {
               _isShowDelete() ?
               GestureDetector(
                 child: Icon(Icons.delete, color: Colors.deepOrange, size: 28,),
-                onTap: (){},
+                onTap: _handleDelete,
               ): Text('')
             ],
           ),
