@@ -131,11 +131,8 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
           setState(() {
             debugLable = "flutter onOpenNotification: $message";
           });
-          if (message['alert'] == '帖子内容') {
-            eventBus.fire(pointEvent(2));
-          } else {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => PacketRain()));
-          }
+
+          eventBus.fire(pointEvent(2));
         },
         onReceiveMessage: (Map<String, dynamic> message) async {
           print("flutter onReceiveMessage: $message");
@@ -291,9 +288,14 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
               Row(children: <Widget>[
                 loadAssetImage('user/point', width: 25, height: 25),
                 Gaps.hGap5,
-                Text('我的积分')
+                GestureDetector(
+                  child: Text('我的积分'),
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => PacketRain()));
+                  },
+                )
               ],),
-              Text(_userInfo.point.toString())
+              Text(_userInfo.point.toString()),
             ],
           ),
         ),
