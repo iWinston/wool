@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wools/net/http.dart';
 import 'package:wools/resource/gaps.dart';
+import 'package:wools/utils/toast.dart';
 import 'package:wools/widgets/images_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -66,7 +67,10 @@ class _LoginPageState extends State<LoginPage> {
       prefs.setString('name', response.data['data']['name']);
       prefs.setString('avatorPath', response.data['data']['avatorPath']);
       prefs.setInt('id', response.data['data']['id']);
-      Navigator.of(context).pushReplacementNamed('home');
+      prefs.setInt('point', response.data['data']['point']);
+      Navigator.of(context).pushReplacementNamed('tags');
+    } else {
+      Toast.show('登录失败');
     }
   }
 

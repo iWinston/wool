@@ -1,18 +1,23 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:wools/dao/news_dao.dart';
 import 'package:wools/model/news_model.dart';
+import 'package:wools/net/http.dart';
 import 'package:wools/utils/toast.dart';
 import 'package:wools/widgets/my_refresh_list.dart';
 import 'package:wools/widgets/state_layout.dart';
 import 'package:wools/widgets/state_layout.dart';
 import 'info_item.dart';
+import 'package:wools/utils/event_bus.dart';
 
 class InfoList extends StatefulWidget {
   final int index;
+  final int userId;
 
   const InfoList({
     Key key,
-    @required this.index
+    @required this.index,
+    @required this.userId,
   }): super(key: key);
 
 
@@ -32,13 +37,16 @@ class _InfoListState extends State<InfoList> with AutomaticKeepAliveClientMixin<
     super.initState();
 
     //Item数量
-    _maxPage = widget.index == 0 ? 1 : (widget.index == 1 ? 2 : 3);
+    _maxPage = widget.index ;
+    eventBus.on<pointEvent>().listen((pointEvent point) =>
+        _onRefresh()
+    );
 
     _onRefresh();
   }
 
   Future _onRefresh() async {
-    NewsModel res = await NewsDao.fetch(widget.index, _page);
+    NewsModel res = await NewsDao.fetch(widget.index+1, _page);
     print(res.data);
     setState(() {
       _page = 1;
@@ -54,15 +62,23 @@ class _InfoListState extends State<InfoList> with AutomaticKeepAliveClientMixin<
   }
 
   Future _loadMore() async {
-    await Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        _list.addAll(List.generate(10, (i) => 'newItem：$i'));
-        _page ++;
-      });
+    NewsModel res = await NewsDao.fetch(widget.index, _page);
+    print(res.data);
+    _list.addAll(res.data);
+    setState(() {
+      _page++;
     });
+//    await Future.delayed(Duration(seconds: 2), () {
+//      setState(() {
+//        _list.addAll(List.generate(10, (i) => 'newItem：$i'));
+//        _page ++;
+//      });
+//    });
   }
 
-
+  refreshData() async {
+    _onRefresh();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +88,9 @@ class _InfoListState extends State<InfoList> with AutomaticKeepAliveClientMixin<
         stateType: _stateType,
         onRefresh: _onRefresh,
         loadMore: _loadMore,
-        hasMore: _page < _maxPage,
+        hasMore: false,
         itemBuilder: (_, index){
-          print('三分$index');
-          return InfoItem(newItem: _list[index]);
+          return InfoItem(newItem: _list[index], userId: widget.userId, refreshData: refreshData);
         }
     );
   }

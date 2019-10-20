@@ -3,7 +3,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:wools/pages/login.dart';
 import 'package:wools/pages/post.dart';
 import 'package:wools/pages/splash.dart';
-import 'package:wools/pages/tags.dart';
+import 'package:wools/pages/tags_page.dart';
 import 'package:wools/pages/home/home.dart';
 
 void main() async {
@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return OKToast(
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: '找羊毛',
         theme: ThemeData(
           primarySwatch: Colors.pink,
         ),
@@ -37,6 +37,7 @@ class _MyAppState extends State<MyApp> {
           // 这里可以定义静态路由，不能传递参数
           'home': (BuildContext context) => Home(),
           'login': (BuildContext context) => LoginPage(),
+          'tags': (BuildContext context) => TagsPage(),
         },
       ),
     );

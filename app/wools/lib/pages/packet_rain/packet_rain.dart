@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:animated_background/animated_background.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:wools/resource/gaps.dart';
 import 'package:wools/widgets/images_widget.dart';
-import '../red.dart';
 
 class PacketRain extends StatefulWidget {
   @override

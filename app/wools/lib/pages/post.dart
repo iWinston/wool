@@ -1,11 +1,11 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wools/model/tags_model.dart';
 import 'package:wools/net/http.dart';
 import 'package:wools/resource/gaps.dart';
+import 'package:wools/utils/event_bus.dart';
 import 'package:wools/utils/toast.dart';
 import 'package:wools/widgets/select_image.dart';
 
@@ -77,15 +77,19 @@ class _PostState extends State<Post> {
     params['location'] = '深圳市南山区';
     params['tagIds'] = [_currTagId];
     params['photoPath'] = _uploadImgUrl;
-    print(params);
     Response response = await dio.post('news', data: params);
     Navigator.pop(context);
     if (response.data['status'] == 'succ') {
+      _notifyUpdate();
       Toast.show('提交成功');
       Future.delayed(Duration(seconds: 1), () {
         Navigator.pop(context); //pop dialog
       });
     }
+  }
+
+  _notifyUpdate() {
+    eventBus.fire(pointEvent(2));
   }
 
   @override
@@ -195,14 +199,18 @@ class _PostState extends State<Post> {
           _currTagId = tab.id;
         });
       },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(28),
-          border: _currTab == tab.name ? Border.all(color: Colors.white) : Border.all(color: Color(0xcc9d9d9d0)),
-          color: _currTab == tab.name ? Colors.pink : Colors.white,
+      child: SizedBox(
+        width: 80,
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 12),
+          margin: EdgeInsets.only(right: 20,bottom: 20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(28),
+            border: _currTab == tab.name ? Border.all(color: Colors.white) : Border.all(color: Color(0xcc9d9d9d0)),
+            color: _currTab == tab.name ? Colors.pink : Colors.white,
+          ),
+          child: Text(tab.name,textAlign: TextAlign.center, style: TextStyle(color: _currTab == tab.name ? Colors.white : Color(0xff666666), fontSize: 15),),
         ),
-        child: Text(tab.name, style: TextStyle(color: _currTab == tab.name ? Colors.white : Color(0xff666666), fontSize: 15),),
       ),
     );
   }

@@ -28,7 +28,7 @@ class NewsItem {
   int id;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
+  String deletedAt;
   int userId;
   String content;
   String photoPath;
@@ -80,10 +80,10 @@ class User {
   int id;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
-  Null name;
+  String deletedAt;
+  String name;
   String phone;
-  Null avatorPath;
+  String avatorPath;
   int point;
 
   User(

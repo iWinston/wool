@@ -1,15 +1,42 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:wools/model/news_model.dart';
+import 'package:wools/net/http.dart';
 import 'package:wools/resource/gaps.dart';
+import 'package:wools/utils/toast.dart';
 import 'package:wools/widgets/images_widget.dart';
 
-class InfoItem extends StatelessWidget {
+class InfoItem extends StatefulWidget {
   final NewsItem newItem;
+  final int userId;
+  final Function refreshData;
 
   const InfoItem({
     Key key,
     @required this.newItem,
+    @required this.userId,
+    @required this.refreshData,
   }) : super(key: key);
+
+  @override
+  _InfoItemState createState() => _InfoItemState();
+}
+
+class _InfoItemState extends State<InfoItem> {
+  _isShowDelete() {
+    return widget.userId == widget.newItem.userId;
+  }
+
+  _handleDelete() async {
+    Dio dio = $http();
+    Response res = await dio.post('news/${widget.newItem.id}');
+    if (res.data['status'] == 'succ') {
+      Toast.show('删除成功');
+      widget.refreshData();
+    } else {
+      Toast.show('删除失败～');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,28 +47,31 @@ class InfoItem extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              loadAssetImage('icons/A',height: 36, width: 36, fit: BoxFit.fill),
+              Image.network(widget.newItem.user.avatorPath??'',height: 36, width: 36, fit: BoxFit.fill),
               Gaps.hGap8,
-              Text(newItem.user.name??'', style: TextStyle(color: Color(0xff888888)),),
+              Text(widget.newItem.user.name??'', style: TextStyle(color: Color(0xff888888)),),
             ],
           ),
           Gaps.vGap10,
-          Text(newItem.content??''),
+          Text(widget.newItem.content??''),
           Gaps.vGap10,
-          loadNetworkImage(newItem.photoPath, width: double.infinity, height: 150),
+          loadNetworkImage(widget.newItem.photoPath, width: double.infinity, height: 200),
           Gaps.vGap10,
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  Text(newItem.location??'', style: TextStyle(color: Color(0xff999999))),
+                  Text(widget.newItem.location??'', style: TextStyle(color: Color(0xff999999))),
                   Gaps.hGap8,
-                  Text('2019-12-12', style: TextStyle(color: Color(0xff999999))),
+                  Text(DateTime.parse(widget.newItem.createdAt).toIso8601String(), style: TextStyle(color: Color(0xff999999))),
                 ],
               ),
+              _isShowDelete() ?
               GestureDetector(
-                child: Icon(Icons.delete)
-              )
+                child: Icon(Icons.delete, color: Colors.deepOrange, size: 28,),
+                onTap: (){},
+              ): Text('')
             ],
           ),
           Gaps.vGap10,

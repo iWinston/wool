@@ -1,6 +1,27 @@
+import 'package:wools/model/tags_model.dart';
 
+class UserInfoModel {
+  UserModel data;
+  String status;
 
-class LoginModel {
+  UserInfoModel({this.data, this.status});
+
+  UserInfoModel.fromJson(Map<String, dynamic> json) {
+    data = json['data'] != null ? new UserModel.fromJson(json['data']) : null;
+    status = json['status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data.toJson();
+    }
+    data['status'] = this.status;
+    return data;
+  }
+}
+
+class UserModel {
   int id;
   String createdAt;
   String updatedAt;
@@ -9,10 +30,9 @@ class LoginModel {
   String phone;
   String avatorPath;
   int point;
-  String token;
-  int expired;
+  List<TagItem> tags;
 
-  LoginModel(
+  UserModel(
       {this.id,
         this.createdAt,
         this.updatedAt,
@@ -21,10 +41,9 @@ class LoginModel {
         this.phone,
         this.avatorPath,
         this.point,
-        this.token,
-        this.expired});
+        this.tags});
 
-  LoginModel.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -33,8 +52,12 @@ class LoginModel {
     phone = json['phone'];
     avatorPath = json['avatorPath'];
     point = json['point'];
-    token = json['token'];
-    expired = json['expired'];
+    if (json['tags'] != null) {
+      tags = new List<TagItem>();
+      json['tags'].forEach((v) {
+        tags.add(new TagItem.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -47,8 +70,10 @@ class LoginModel {
     data['phone'] = this.phone;
     data['avatorPath'] = this.avatorPath;
     data['point'] = this.point;
-    data['token'] = this.token;
-    data['expired'] = this.expired;
+    if (this.tags != null) {
+      data['tags'] = this.tags.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
+

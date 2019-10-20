@@ -28,7 +28,7 @@ class TagItem {
   int id;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
+  String deletedAt;
   String name;
 
   TagItem({this.id, this.createdAt, this.updatedAt, this.deletedAt, this.name});

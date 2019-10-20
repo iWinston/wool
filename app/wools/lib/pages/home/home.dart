@@ -1,27 +1,30 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wools/dao/tags_dao.dart';
+import 'package:wools/dao/user_dao.dart';
 import 'package:wools/model/home_model.dart';
 import 'package:wools/model/tags_model.dart';
+import 'package:wools/model/user_model.dart';
 import 'package:wools/pages/home/provider/provider.dart';
 import 'package:wools/pages/home/widgets/info_list.dart';
 import 'package:wools/pages/location_view.dart';
 import 'package:wools/pages/packet_rain/packet_rain.dart';
 import 'package:wools/pages/post.dart';
-import 'package:wools/pages/tags.dart';
+import 'package:wools/pages/tags_page.dart';
 import 'package:wools/resource/gaps.dart';
 import 'package:wools/utils/event_bus.dart';
+import 'package:wools/utils/toast.dart';
 import 'package:wools/widgets/images_widget.dart';
 import 'package:wools/pages/home/widgets/info_card.dart';
 import 'package:wools/model/card_info.dart';
 import 'package:flutter/services.dart';
 import 'package:wools/net/http.dart';
 import '../login.dart';
+
 
 class Home extends StatefulWidget {
 
@@ -48,20 +51,18 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
   List<TagItem> tabs = [];
   String city = '深圳';
   int _id;
-  String _name = '';
-  String _avatorPath = '';
   var pointE;
+  UserModel _userInfo;
+  String comfirmType = 'logout';
+  int tabIndex = 0;
 
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
-    _initUserInfo();
     getData();
-//    pointE = eventBus.on<pointEvent>().listen((event){
-//      print(event);
-//    });
+    _getUserInfo();
   }
 
   @override
@@ -70,19 +71,13 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
     super.dispose();
   }
 
-  _initUserInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    String name = prefs.getString('name');
-    String avatorPath = prefs.getString('avatorPath');
-    int id = prefs.getInt('id');
-    print(name);
-    print(id);
-    this.setState((){
-      _id = id;
-      _name = name;
-      _avatorPath = avatorPath;
-    });
-  }
+//  _initUserInfo() async {
+//    final prefs = await SharedPreferences.getInstance();
+//    int id = prefs.getInt('id');
+//    this.setState((){
+//      _id = id;
+//    });
+//  }
 
   void getData() async {
     TagsModel res = await TagsDao.fetch();
@@ -93,22 +88,25 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
     });
   }
 
-  void initTabData() {
-//    tabList = [
-//      new TabTitle('推荐', 10),
-//      new TabTitle('热点', 0),
-//      new TabTitle('社会', 1),
-//      new TabTitle('娱乐', 2),
-//      new TabTitle('体育', 3),
-//      new TabTitle('美文', 4),
-//      new TabTitle('科技', 5),
-//      new TabTitle('财经', 6),
-//      new TabTitle('时尚', 7),
-//    ];
+  void _getUserInfo() async {
+    UserInfoModel res = await UserDao.fetch();
+    if (res.status == 'succ') {
+      _userInfo = res.data;
+      print(_userInfo);
+
+//      jpush.setTags([_userInfo.phone]).then((map) {
+//      }).catchError((error) {
+//      }) ;
+    } else {
+      Toast.show('获取用户信息失败');
+    }
   }
 
 
   _onPageChange(int index) {
+    setState(() {
+      tabIndex = index;
+    });
     _tabController.animateTo(index);
     provider.setIndex(index);
   }
@@ -199,19 +197,19 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
             child: PageView.builder(
               itemBuilder: (BuildContext context, int index) {
                 print(index);
-                return InfoList(index: index);
+                return InfoList(index: index, userId: _id,);
                },
               itemCount: tabs.length,
               controller: _pageController,
               onPageChanged: _onPageChange,
             ),
-          ) : Text(' ')
+          ) : Text('')
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Post(tags: tabs)));
-//            Navigator.of(context).pushNamed('/router/post').then((value) {});
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => PacketRain()));
+//          tags: tabs
         },
         tooltip: 'Increment',
         child: Icon(Icons.add, color: Colors.pink,),
@@ -235,16 +233,16 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
             },
             child: Row(
               children: <Widget>[
-                loadAssetImage('icons/A',height: 36, width: 36, fit: BoxFit.fill),
+                Image.network(_userInfo.avatorPath??'',height: 36, width: 36, fit: BoxFit.fill),
                 Gaps.hGap8,
-                Text(_name)
+                Text(_userInfo.name??'')
               ],
             )
           ),
-          Text('撸羊毛', style: TextStyle(color: Colors.pink, fontSize: 20),),
+          Text('找羊毛', style: TextStyle(color: Colors.pink, fontSize: 20),),
           Row(
             children: <Widget>[
-              Icon(Icons.location_on),
+              Icon(Icons.location_on, color: Color(0xff888888),),
               Text(city, style: TextStyle(color: Color(0xff888888), fontSize: 15),)
             ],
           )
@@ -259,22 +257,6 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
     Navigator.of(context).pushReplacementNamed('login');
   }
 
-  Widget get _swiper {
-    return Container(
-      child: Container(
-        height: 140,
-        child: Swiper(
-          itemBuilder: (BuildContext context,int index){
-            return Container(
-              child: Text('ljl')
-            );
-          },
-          itemCount: 3,
-          pagination: SwiperPagination(),
-        ),
-      ),
-    );
-  }
 
   Widget get _drawer {
     return Drawer(
@@ -288,9 +270,9 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
                   margin: EdgeInsets.only(top: 50, left: 10),
                   child: Row(
                     children: <Widget>[
-                      loadAssetImage('icons/A',height: 36, width: 36, fit: BoxFit.fill),
+                      Image.network(_userInfo.avatorPath??'',height: 36, width: 36, fit: BoxFit.fill),
                       Gaps.hGap8,
-                      Text(_name),
+                      Text(_userInfo.name??'',style: TextStyle(color: Colors.white, fontSize: 20),),
                     ],
                   ),
                 ),
@@ -316,7 +298,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
                 Gaps.hGap5,
                 Text('我的积分')
               ],),
-              Text('883')
+              Text(_userInfo.point.toString())
             ],
           ),
         ),
@@ -331,18 +313,12 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
                 Text('偏好')
               ],),
               Wrap(
-                children: <Widget>[
-                  Padding(
+                children: _userInfo.tags.map((tag) {
+                  return Padding(
                     padding: EdgeInsets.only(right: 5),
-                    child: Text('娱乐'),
-                  ),Padding(
-                    padding: EdgeInsets.only(right: 5),
-                    child: Text('娱乐'),
-                  ),Padding(
-                    padding: EdgeInsets.only(right: 5),
-                    child: Text('娱乐'),
-                  ),
-                ],
+                    child: Text(tag.name),
+                  );
+                }).toList()
               )
             ],
           ),
@@ -366,6 +342,7 @@ class _HomeState extends State<Home>  with SingleTickerProviderStateMixin, Autom
       ],
     );
   }
+
 
   @override
   bool get wantKeepAlive => true;
