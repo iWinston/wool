@@ -53,7 +53,10 @@ export class UserService {
   }
 
   genAvatorPath(name: string) {
-    const letter = name === '喜羊羊' ? 'X' : name.slice(0, 1);
+    if (name === '喜羊羊') {
+      return `${this.config.get('app.baseUrl')}/assert/logo.png`;
+    }
+    const letter = name.slice(0, 1);
     return `${this.config.get(
       'app.baseUrl',
     )}/assert/default-avator/${letter}.png`;

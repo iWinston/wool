@@ -43,7 +43,7 @@ export class NewsService {
       .createQueryBuilder('it')
       .leftJoin('it.tags', 'tag')
       .leftJoinAndSelect('it.user', 'user')
-      .where('tag.id = :tagId', { tagId })
+      .when(tagId !== 1, qb => qb.where('tag.id = :tagId', { tagId }))
       .orderBy('it.id', 'DESC')
       .paginate(paginateDto.current, paginateDto.size)
       .getMany();
