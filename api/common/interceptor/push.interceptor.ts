@@ -17,7 +17,7 @@ export class PushInterceptor implements NestInterceptor {
       map((data: News) => {
         const req = context.switchToHttp().getRequest();
         const user = req.user;
-        this.pushService.push(data.content, data.location);
+        this.pushService.push(data);
         return data;
       }),
     );
